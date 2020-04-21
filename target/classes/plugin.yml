@@ -1,6 +1,6 @@
 main: Plugins.App
 name: Potato
-version: 0.1
+version: 0.2.1
 
 commands:
   deathcoords: #指令名
@@ -11,4 +11,8 @@ commands:
   get_backup:
     description: "查看当前存在的用户数据备份"
     usage: /get_backup
+    permission-message: "No permission"
+  roll_back_user_info:
+    description: "查看当前存在的用户数据备份"
+    usage: /roll_back_user_info
     permission-message: "No permission"

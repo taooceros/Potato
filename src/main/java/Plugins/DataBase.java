@@ -2,6 +2,7 @@ package Plugins;
 
 import java.io.File;
 import java.security.Timestamp;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -11,6 +12,10 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -97,7 +102,8 @@ public class DataBase {
     public void insert_user_info(byte[] info, String uuid) {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
                 PreparedStatement prep = conn
-                        .prepareStatement("insert into user_info (uuid,info,date_time) values (?,?,?)");) {
+                        .prepareStatement("insert into user_info (uuid,info,date_time) values (?,?,?)");
+                Statement stat = conn.createStatement()) {
             prep.setString(1, uuid);
             prep.setBytes(2, info);
 
@@ -105,10 +111,52 @@ public class DataBase {
             String Now = df.format(new java.util.Date());
             prep.setString(3, Now);
             prep.executeUpdate();
-            
-            
+            try (ResultSet rs = stat.executeQuery("Select count(*) from user_info where uuid='" + uuid + "'")) {
+                if (rs.next() && rs.getInt(1) > 15) {
+                    stat.executeQuery("delete from user_info where uuid='" + uuid
+                            + "' and date_time=(select min(date_time) from user_info)");
+                }
+            }
+
         } catch (Exception ex) {
 
         }
+    }
+
+    public ArrayList<String> get_user_info_list(String uuid) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
+                Statement stat = conn.createStatement();
+                ResultSet rs = stat.executeQuery("Select date_time from user_info where uuid='" + uuid + "'");) {
+            ArrayList<String> result = new ArrayList<>();
+            while (rs.next()) {
+                result.add(rs.getString(1));
+            }
+            return result;
+
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+        return null;
+    }
+
+    public Object[] get_user_info(String uuid, String DateTime) {
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
+                Statement stat = conn.createStatement();
+                ResultSet rs = stat.executeQuery("Select date_time,info from user_info where uuid='" + uuid
+                        + "' and date_time like '" + DateTime + "'");) {
+            if (rs.next()) {
+                Object[] result = new Object[2];
+                // the first one is the Date
+                // the second one is the user_info (byte[])
+                result[0] = rs.getString(1);
+                result[1] = rs.getBytes(2);
+                return result;
+            }
+            return null;
+
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+        return null;
     }
 }
