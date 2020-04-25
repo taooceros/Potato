@@ -1,18 +1,19 @@
 main: Plugins.App
 name: Potato
-version: 0.2.1
+version: 0.2.2
+api-version: 1.15
 
 commands:
   deathcoords: #指令名
     description: "获取上一次死亡的坐标" #指令的注解
-    usage: /deathcoords #指令的用法 当onCommand()方法返回false时提示这里的内容
+    usage: /deathcoords 获取上一次死亡的坐标 #指令的用法 当onCommand()方法返回false时提示这里的内容
     aliases: [d,de] #指令的多种形式 意为可以用 d, de 来触发/demo这个指令
-    permission-message: "无权使用" #当输入者无上方权限时提示该信息
+    permission-message: "No permission" #当输入者无上方权限时提示该信息
   get_backup:
     description: "查看当前存在的用户数据备份"
     usage: /get_backup
     permission-message: "No permission"
   roll_back_user_info:
     description: "查看当前存在的用户数据备份"
-    usage: /roll_back_user_info
+    usage: /roll_back_user_info <Date> 回档到指定时间，date为空自动选择最新的档
     permission-message: "No permission"

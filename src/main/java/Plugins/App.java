@@ -24,9 +24,10 @@ public class App extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("deathcoords")).setExecutor(dc.new commandExecutor());
 
         UserInfo ui = new UserInfo(this);
-        ui.new BackSchaduledTask().runTaskTimer(this, 1200, 14400);
+        ui.new BackSchaduledTask().runTaskTimerAsynchronously(this, 1200, 144000);
         Objects.requireNonNull(getCommand("get_backup")).setExecutor(ui.new getCommandExecutor());
-        Objects.requireNonNull(getCommand("roll_back_user_info")).setExecutor(ui.new rollbackCommandExecutor());;
+        Objects.requireNonNull(getCommand("roll_back_user_info")).setExecutor(ui.new rollbackCommandExecutor());
+        Bukkit.getPluginManager().registerEvents(ui.new listener(), this);
     }
 
     @Override

@@ -25,7 +25,9 @@ public class DeathCoodinate {
                     String msg_c = "&7You last died at &8(&a%x%&7, &a%y%&7, &a%z%&8)&7 in world &a%world%&7."
                             .replaceAll("%x%", coordinate[0]).replaceAll("%y%", coordinate[1])
                             .replaceAll("%z%", coordinate[2]).replaceAll("%world%", coordinate[3]);
+
                     TextComponent msg = new TextComponent(ChatColor.translateAlternateColorCodes('&', msg_c));
+
                     msg.setClickEvent(new ClickEvent(ClickEvent.Action.COPY_TO_CLIPBOARD,
                             String.format("%s %s %s", coordinate[0], coordinate[1], coordinate[2])));
                     msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
