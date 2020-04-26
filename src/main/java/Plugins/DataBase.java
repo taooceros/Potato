@@ -96,7 +96,7 @@ public class DataBase {
                     String uuid = deathEvent.getEntity().getUniqueId().toString();
                     Location loc = deathEvent.getEntity().getLocation();
                     stat.executeUpdate(String.format(
-                            "insert into death_coordinate (uuid,x,y,z,world) values ('%s',%d,%d,%d,%s)", uuid,
+                            "insert into death_coordinate (uuid,x,y,z,world) values ('%s',%d,%d,%d,'%s')", uuid,
                             (int) loc.getX(), (int) loc.getY(), (int) loc.getZ(), loc.getWorld().getName()));
                 }
 

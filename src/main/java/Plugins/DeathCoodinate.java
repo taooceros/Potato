@@ -47,7 +47,7 @@ public class DeathCoodinate {
 
     public class listener implements Listener {
         @EventHandler
-        public void OnDeath(final PlayerDeathEvent e) {
+        public void OnDeath(PlayerDeathEvent e) {
             App.db.update_death_coordinate(e);
         }
     }
