@@ -38,12 +38,12 @@ public class UserInfo {
                 Player p = (Player) sender;
                 ArrayList<String> dateList = App.db.get_user_info_list(p.getUniqueId().toString());
                 if (dateList != null) {
-                    TextComponent text = new TextComponent();
-                    text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                            new ComponentBuilder("Click to auto suggest rollback command").color(ChatColor.BLUE)
-                                    .create()));
+
                     for (String date : dateList) {
-                        text.setText(date);
+                        TextComponent text = new TextComponent(date);
+                        text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                new ComponentBuilder("Click to auto suggest rollback command").color(ChatColor.BLUE)
+                                        .create()));
                         text.setClickEvent(
                                 new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/roll_back_user_info " + date));
                         sender.spigot().sendMessage(text);

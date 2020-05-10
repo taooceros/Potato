@@ -21,7 +21,7 @@ public class Here {
                 Location loc = p.getLocation();
                 Bukkit.spigot()
                         .broadcast(new ComponentBuilder(p.getName() + "'s Location: ").color(ChatColor.BLUE)
-                                .append(loc.getWorld().getName()).color(ChatColor.GOLD)
+                                .append(loc.getWorld().getName().toUpperCase() + " ").color(ChatColor.GOLD)
                                 .append(String.format("X: %.0f, Y: %.0f, Z: %.0f", loc.getX(), loc.getY(), loc.getZ()))
                                 .color(ChatColor.GREEN).create());
 
@@ -36,12 +36,13 @@ public class Here {
                 if (target != null) {
 
                     target.spigot().sendMessage(new ComponentBuilder(p.getName() + "'s Location: ")
-                            .color(ChatColor.BLUE).append(loc.getWorld().getName()).color(ChatColor.GOLD)
+                            .color(ChatColor.BLUE).append(loc.getWorld().getName().toUpperCase() + " ")
+                            .color(ChatColor.GOLD)
                             .append(String.format("X: %.0f, Y: %.0f, Z: %.0f", loc.getX(), loc.getY(), loc.getZ()))
                             .color(ChatColor.GREEN).create());
 
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 300, 10));
-                    p.spigot().sendMessage(new ComponentBuilder("You will be highlight for 15 seconds")
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 10));
+                    p.spigot().sendMessage(new ComponentBuilder("You will be highlight for 30 seconds")
                             .color(ChatColor.AQUA).create());
 
                 } else {
