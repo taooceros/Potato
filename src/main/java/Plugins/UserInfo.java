@@ -3,9 +3,7 @@ package Plugins;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.bukkit.Bukkit;
@@ -17,13 +15,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class UserInfo {
     String player_data_path = "world/playerdata/";
@@ -34,17 +32,23 @@ public class UserInfo {
     }
 
     public class getCommandExecutor implements CommandExecutor {
-
         @Override
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
                 ArrayList<String> dateList = App.db.get_user_info_list(p.getUniqueId().toString());
-                if (dateList != null)
+                if (dateList != null) {
+                    TextComponent text = new TextComponent();
+                    text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                            new ComponentBuilder("Click to auto suggest rollback command").color(ChatColor.BLUE)
+                                    .create()));
                     for (String date : dateList) {
-                        sender.sendMessage(date);
+                        text.setText(date);
+                        text.setClickEvent(
+                                new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/roll_back_user_info " + date));
+                        sender.spigot().sendMessage(text);
                     }
-                else {
+                } else {
                     sender.sendMessage("No information");
                 }
 

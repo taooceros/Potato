@@ -1,30 +1,22 @@
 package Plugins;
 
 import java.io.File;
-import java.security.Timestamp;
-import java.sql.Array;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class DataBase {
-    public void initialize() {
+    Connection conn;
+
+    public DataBase() {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (Exception ex) {
@@ -34,9 +26,12 @@ public class DataBase {
         if (!dir.exists())
             dir.mkdir();
 
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement()) {
-            try (ResultSet dc_t = conn.getMetaData().getTables(null, null, "death_coordinate", null);
+        try {
+
+            conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
+
+            try (Statement stat = conn.createStatement();
+                    ResultSet dc_t = conn.getMetaData().getTables(null, null, "death_coordinate", null);
                     ResultSet ui_t = conn.getMetaData().getTables(null, null, "user_info", null);
                     ResultSet rc_t = conn.getMetaData().getTables(null, null, "rollback_count", null)) {
                 if (!dc_t.next())
@@ -60,10 +55,17 @@ public class DataBase {
         }
     }
 
+    public void close() {
+        try {
+            conn.close();
+        } catch (Exception ex) {
+
+        }
+    }
+
     public String[] get_death_coordinate(Player p) {
         String[] result = new String[4];
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement()) {
+        try (Statement stat = conn.createStatement()) {
             ResultSet rs = stat.executeQuery(String.format("select x,y,z,world from death_coordinate where uuid='%s'",
                     p.getUniqueId().toString()));
             App.logger.info(String.format("select x,y,z,world from death_coordinate where uuid='%s'",
@@ -80,8 +82,7 @@ public class DataBase {
     }
 
     public void update_death_coordinate(PlayerDeathEvent deathEvent) {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement()) {
+        try (Statement stat = conn.createStatement()) {
 
             try (ResultSet rs = stat.executeQuery(String.format("select * from death_coordinate where uuid='%s'",
                     deathEvent.getEntity().getUniqueId()))) {
@@ -108,8 +109,7 @@ public class DataBase {
     }
 
     public void insert_user_info(byte[] info, String uuid) {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                PreparedStatement prep = conn.prepareStatement("insert into user_info (uuid,info) values (?,?)");
+        try (PreparedStatement prep = conn.prepareStatement("insert into user_info (uuid,info) values (?,?)");
                 Statement stat = conn.createStatement()) {
             prep.setString(1, uuid);
             prep.setBytes(2, info);
@@ -131,8 +131,7 @@ public class DataBase {
     }
 
     public ArrayList<String> get_user_info_list(String uuid) {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement();
+        try (Statement stat = conn.createStatement();
                 ResultSet rs = stat.executeQuery("Select date_time from user_info where uuid='" + uuid + "'");) {
             ArrayList<String> result = new ArrayList<>();
             while (rs.next()) {
@@ -147,8 +146,7 @@ public class DataBase {
     }
 
     public Object[] get_user_info(String uuid, String DateTime) {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement();
+        try (Statement stat = conn.createStatement();
                 ResultSet rs = stat.executeQuery("Select date_time,info from user_info where uuid='" + uuid
                         + "' and date_time like '%" + DateTime + "%'");) {
             if (rs.next()) {
@@ -169,8 +167,7 @@ public class DataBase {
 
     public int get_remaining_oppotunity(String uuid) {
         int result = 0;
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement();
+        try (Statement stat = conn.createStatement();
                 ResultSet rs = stat
                         .executeQuery("Select count,update_date from rollback_count where uuid='" + uuid + "'");) {
             if (rs.next()) {
@@ -191,8 +188,7 @@ public class DataBase {
     }
 
     public void reduce_count(String uuid) {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + Config.path + "/database.db");
-                Statement stat = conn.createStatement()) {
+        try (Statement stat = conn.createStatement()) {
             stat.executeUpdate("Update rollback_count set count=count-1 where uuid='" + uuid + "'");
         } catch (Exception ex) {
             App.logger.info(ex.getMessage());

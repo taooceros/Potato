@@ -17,7 +17,6 @@ public class App extends JavaPlugin implements Listener {
     public void onEnable() {
         logger = getLogger();
         db = new DataBase();
-        db.initialize();
 
         DeathCoodinate dc = new DeathCoodinate();
         Bukkit.getPluginManager().registerEvents(dc.new listener(), this);
@@ -28,6 +27,9 @@ public class App extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("get_backup")).setExecutor(ui.new getCommandExecutor());
         Objects.requireNonNull(getCommand("roll_back_user_info")).setExecutor(ui.new rollbackCommandExecutor());
         Bukkit.getPluginManager().registerEvents(ui.new listener(), this);
+
+        Here here = new Here();
+        Objects.requireNonNull(getCommand("here")).setExecutor(here.new commandExecutor());
     }
 
     @Override
@@ -37,7 +39,6 @@ public class App extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        getLogger().info("See you again, SpigotMC!");
-
+        db.close();
     }
 }
