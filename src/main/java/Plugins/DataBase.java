@@ -103,8 +103,8 @@ public class DataBase {
 
             }
 
-        } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+        } catch (Throwable t) {
+            App.logger.info(t.getStackTrace().toString());
         }
     }
 
@@ -121,7 +121,7 @@ public class DataBase {
             try (ResultSet rs = stat.executeQuery("Select count(*) from user_info where uuid='" + uuid + "'")) {
                 if (rs.next() && rs.getInt(1) > 15) {
                     stat.executeQuery("delete from user_info where uuid='" + uuid
-                            + "' and date_time=(select min(date_time) from user_info)");
+                            + "' and date_time=(select min(date_time) from user_info where uuid='"+uuid+"')");
                 }
             }
 
