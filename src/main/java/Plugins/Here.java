@@ -28,8 +28,8 @@ public class Here {
                                 .color(ChatColor.GREEN).create());
 
                 p.spigot().sendMessage(
-                        new ComponentBuilder("You will be highlight for 15 seconds").color(ChatColor.AQUA).create());
-                p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 300, 10));
+                        new ComponentBuilder("You will be highlight for 30 seconds").color(ChatColor.AQUA).create());
+                p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 15));
 
             } else if (args.length > 0 && sender instanceof Player) {
                 List<Player> targets = Bukkit.matchPlayer(String.join(" ", args));
@@ -43,7 +43,7 @@ public class Here {
                             .append(String.format("X: %.0f, Y: %.0f, Z: %.0f", loc.getX(), loc.getY(), loc.getZ()))
                             .color(ChatColor.GREEN).create());
 
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 10));
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 15));
                     p.spigot().sendMessage(new ComponentBuilder("You will be highlight for 30 seconds")
                             .color(ChatColor.AQUA).create());
 
