@@ -19,5 +19,5 @@ commands:
     permission-message: "No permission"
   here:
     description: "发送现有坐标到聊天框"
-    usage: /!here
+    usage: /here <Player Name> 如参数有被写，则发送现有坐标到指定玩家（会发给所有名字含有参数的玩家）
     permission-message: "No permission"

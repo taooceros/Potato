@@ -103,7 +103,14 @@ public class UserInfo {
 
                 if (data != null & App.db.get_remaining_oppotunity(p.getUniqueId().toString()) > 0) {
                     sender.sendMessage("You are going to rollback your information to the one stored at " + data[0]);
-                    sender.sendMessage("Enter rollback_user_info confirm to confirm the rollback task");
+                    sender.spigot().sendMessage(
+                            new ComponentBuilder("Enter /roll_back_user_info confirm to confirm the rollback task")
+                                    .color(ChatColor.RED)
+                                    .event(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/roll_back_user_info "))
+                                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(
+                                            "Click to auto suggest rollback command (you should mannually enter the confirm)")
+                                                    .color(ChatColor.AQUA).create()))
+                                    .create());
 
                     sender.spigot().sendMessage(new ComponentBuilder("You still left ").color(ChatColor.AQUA)
                             .append(Integer.toString(App.db.get_remaining_oppotunity(p.getUniqueId().toString())))

@@ -1,5 +1,7 @@
 package Plugins;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -30,10 +32,10 @@ public class Here {
                 p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 300, 10));
 
             } else if (args.length > 0 && sender instanceof Player) {
-                Player target = Bukkit.getPlayer(String.join(" ", args));
+                List<Player> targets = Bukkit.matchPlayer(String.join(" ", args));
                 Player p = (Player) sender;
                 Location loc = p.getLocation();
-                if (target != null) {
+                for (Player target : targets) {
 
                     target.spigot().sendMessage(new ComponentBuilder(p.getName() + "'s Location: ")
                             .color(ChatColor.BLUE).append(loc.getWorld().getName().toUpperCase() + " ")
@@ -45,9 +47,10 @@ public class Here {
                     p.spigot().sendMessage(new ComponentBuilder("You will be highlight for 30 seconds")
                             .color(ChatColor.AQUA).create());
 
-                } else {
-                    p.sendMessage("Target Player Not Found");
                 }
+                if (targets.size() == 0)
+                    p.sendMessage("Target Player Not Found");
+
             }
             return true;
         }
