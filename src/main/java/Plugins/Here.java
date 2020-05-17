@@ -43,11 +43,15 @@ public class Here {
                             .append(String.format("X: %.0f, Y: %.0f, Z: %.0f", loc.getX(), loc.getY(), loc.getZ()))
                             .color(ChatColor.GREEN).create());
 
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 15));
-                    p.spigot().sendMessage(new ComponentBuilder("You will be highlight for 30 seconds")
-                            .color(ChatColor.AQUA).create());
-
                 }
+                p.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 600, 15));
+                p.spigot().sendMessage(
+                        new ComponentBuilder("You will be highlight for 30 seconds").color(ChatColor.AQUA).create());
+                p.spigot()
+                        .sendMessage(new ComponentBuilder(p.getName() + "'s Location: ").color(ChatColor.BLUE)
+                                .append(loc.getWorld().getName().toUpperCase() + " ").color(ChatColor.GOLD)
+                                .append(String.format("X: %.0f, Y: %.0f, Z: %.0f", loc.getX(), loc.getY(), loc.getZ()))
+                                .color(ChatColor.GREEN).create());
                 if (targets.size() == 0)
                     p.sendMessage("Target Player Not Found");
 
