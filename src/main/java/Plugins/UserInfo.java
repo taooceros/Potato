@@ -90,19 +90,12 @@ public class UserInfo {
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             if (sender instanceof Player && (args.length != 1 || !args[0].equals("confirm"))) {
                 Player p = (Player) sender;
-                Object[] data;
-                if (args.length == 2) {
-                    data = App.db.get_user_info(p.getUniqueId().toString(), args[0] + " " + args[1]);
-                } else if (args.length == 1) {
-                    data = App.db.get_user_info(p.getUniqueId().toString(), args[0]);
-                } else if (args.length == 0) {
-                    data = App.db.get_user_info(p.getUniqueId().toString(), "");
-                } else {
-                    return false;
-                }
+                Object[] data = App.db.get_user_info(p.getUniqueId().toString(), String.join(" ", args));
 
                 if (data != null & App.db.get_remaining_oppotunity(p.getUniqueId().toString()) > 0) {
+
                     sender.sendMessage("You are going to rollback your information to the one stored at " + data[0]);
+
                     sender.spigot().sendMessage(
                             new ComponentBuilder("Enter /roll_back_user_info confirm to confirm the rollback task")
                                     .color(ChatColor.RED)

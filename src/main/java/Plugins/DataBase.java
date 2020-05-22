@@ -68,8 +68,8 @@ public class DataBase {
         try (Statement stat = conn.createStatement()) {
             ResultSet rs = stat.executeQuery(String.format("select x,y,z,world from death_coordinate where uuid='%s'",
                     p.getUniqueId().toString()));
-            App.logger.info(String.format("select x,y,z,world from death_coordinate where uuid='%s'",
-                    p.getUniqueId().toString()));
+            // App.logger.info(String.format("select ))x,y,z,world from death_coordinate where uuid='%s'",
+                    p.getUniqueId().toString();
             if (rs.next()) {
                 for (int i = 0; i < 4; i++) {
                     result[i] = rs.getString(i + 1);
@@ -114,19 +114,21 @@ public class DataBase {
             prep.setString(1, uuid);
             prep.setBytes(2, info);
 
+            
+
             // DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             // String Now = df.format(new java.util.Date());
             // prep.setString(3, Now);
             prep.executeUpdate();
             try (ResultSet rs = stat.executeQuery("Select count(*) from user_info where uuid='" + uuid + "'")) {
                 if (rs.next() && rs.getInt(1) > 15) {
-                    stat.executeQuery("delete from user_info where uuid='" + uuid
-                            + "' and date_time=(select min(date_time) from user_info where uuid='"+uuid+"')");
+                    stat.executeUpdate("delete from user_info where uuid='" + uuid
+                            + "' and date_time=(select min(date_time) from user_info where uuid='" + uuid + "')");
                 }
             }
 
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            App.logger.info(ex.getStackTrace().toString());
         }
     }
 

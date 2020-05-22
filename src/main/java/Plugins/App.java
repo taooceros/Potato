@@ -30,6 +30,7 @@ public class App extends JavaPlugin implements Listener {
 
         Here here = new Here();
         Objects.requireNonNull(getCommand("here")).setExecutor(here.new commandExecutor());
+
     }
 
     @Override
