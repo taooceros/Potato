@@ -20,7 +20,7 @@ public class DataBase {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
         File dir = new File(Config.path);
         if (!dir.exists())
@@ -47,11 +47,11 @@ public class DataBase {
 
                 }
             } catch (Exception ex) {
-                App.logger.info(ex.getMessage());
+                Main.logger.info(ex.getMessage());
             }
 
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
     }
 
@@ -71,12 +71,13 @@ public class DataBase {
             // App.logger.info(String.format("select ))x,y,z,world from death_coordinate where uuid='%s'",
                     p.getUniqueId().toString();
             if (rs.next()) {
+                // Get the x, y, z, world of the last time deathcoordinate
                 for (int i = 0; i < 4; i++) {
                     result[i] = rs.getString(i + 1);
                 }
             }
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
         return result;
     }
@@ -104,7 +105,7 @@ public class DataBase {
             }
 
         } catch (Throwable t) {
-            App.logger.info(t.getStackTrace().toString());
+            Main.logger.info(t.getStackTrace().toString());
         }
     }
 
@@ -128,7 +129,7 @@ public class DataBase {
             }
 
         } catch (Exception ex) {
-            App.logger.info(ex.getStackTrace().toString());
+            Main.logger.info(ex.getStackTrace().toString());
         }
     }
 
@@ -142,7 +143,7 @@ public class DataBase {
             return result;
 
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
         return null;
     }
@@ -162,7 +163,7 @@ public class DataBase {
             return null;
 
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
         return null;
     }
@@ -184,7 +185,7 @@ public class DataBase {
                 return 3; // default value
             }
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
         return result;
     }
@@ -193,7 +194,7 @@ public class DataBase {
         try (Statement stat = conn.createStatement()) {
             stat.executeUpdate("Update rollback_count set count=count-1 where uuid='" + uuid + "'");
         } catch (Exception ex) {
-            App.logger.info(ex.getMessage());
+            Main.logger.info(ex.getMessage());
         }
     }
 }

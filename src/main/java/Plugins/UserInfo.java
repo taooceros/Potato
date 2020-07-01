@@ -36,7 +36,7 @@ public class UserInfo {
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                ArrayList<String> dateList = App.db.get_user_info_list(p.getUniqueId().toString());
+                ArrayList<String> dateList = Main.db.get_user_info_list(p.getUniqueId().toString());
                 if (dateList != null) {
 
                     for (String date : dateList) {
@@ -54,7 +54,7 @@ public class UserInfo {
 
                 sender.spigot()
                         .sendMessage(new ComponentBuilder("You still left ").color(ChatColor.AQUA)
-                                .append(Integer.toString(App.db.get_remaining_oppotunity(p.getUniqueId().toString())))
+                                .append(Integer.toString(Main.db.get_remaining_oppotunity(p.getUniqueId().toString())))
                                 .color(ChatColor.RED).append(" Oppotunity to rollback in this month")
                                 .color(ChatColor.AQUA).create());
 
@@ -63,7 +63,7 @@ public class UserInfo {
             }
             // when the console want to get the user data
             else if (args.length > 0) {
-                ArrayList<String> dateList = App.db.get_user_info_list(args[0]);
+                ArrayList<String> dateList = Main.db.get_user_info_list(args[0]);
                 if (dateList != null)
                     for (String date : dateList) {
                         sender.sendMessage(date);
@@ -74,7 +74,7 @@ public class UserInfo {
 
                 sender.spigot()
                         .sendMessage(new ComponentBuilder("You still left ").color(ChatColor.AQUA)
-                                .append(Integer.toString(App.db.get_remaining_oppotunity(args[0]))).color(ChatColor.RED)
+                                .append(Integer.toString(Main.db.get_remaining_oppotunity(args[0]))).color(ChatColor.RED)
                                 .append(" Oppotunity to rollback in this month").color(ChatColor.AQUA).create());
                 return true;
             } else
@@ -90,9 +90,9 @@ public class UserInfo {
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             if (sender instanceof Player && (args.length != 1 || !args[0].equals("confirm"))) {
                 Player p = (Player) sender;
-                Object[] data = App.db.get_user_info(p.getUniqueId().toString(), String.join(" ", args));
+                Object[] data = Main.db.get_user_info(p.getUniqueId().toString(), String.join(" ", args));
 
-                if (data != null & App.db.get_remaining_oppotunity(p.getUniqueId().toString()) > 0) {
+                if (data != null & Main.db.get_remaining_oppotunity(p.getUniqueId().toString()) > 0) {
 
                     sender.sendMessage("You are going to rollback your information to the one stored at " + data[0]);
 
@@ -106,7 +106,7 @@ public class UserInfo {
                                     .create());
 
                     sender.spigot().sendMessage(new ComponentBuilder("You still left ").color(ChatColor.AQUA)
-                            .append(Integer.toString(App.db.get_remaining_oppotunity(p.getUniqueId().toString())))
+                            .append(Integer.toString(Main.db.get_remaining_oppotunity(p.getUniqueId().toString())))
                             .color(ChatColor.RED).append(" Oppotunity to rollback in this month").color(ChatColor.AQUA)
                             .create());
 
@@ -136,9 +136,9 @@ public class UserInfo {
                                         player_data_path + p.getUniqueId() + ".dat")) {
                                     output.write(info.data);
                                 } catch (Exception ex) {
-                                    App.logger.info(ex.getMessage());
+                                    Main.logger.info(ex.getMessage());
                                 }
-                                App.db.reduce_count(p.getUniqueId().toString());
+                                Main.db.reduce_count(p.getUniqueId().toString());
                             }
                         }.runTaskLater(plugin, 20);
 
@@ -178,7 +178,7 @@ public class UserInfo {
                     try (FileInputStream inputStream = new FileInputStream(user_info)) {
                         data = new byte[inputStream.available()];
                         inputStream.read(data);
-                        App.db.insert_user_info(data, playerJoinEvent.getPlayer().getUniqueId().toString());
+                        Main.db.insert_user_info(data, playerJoinEvent.getPlayer().getUniqueId().toString());
                         // App.logger.info("Backup " + p.getUniqueId());
                         playerJoinEvent.getPlayer().sendMessage("Your Information has been backup now.");
                     } catch (Exception ex) {
@@ -201,7 +201,7 @@ public class UserInfo {
                 try (FileInputStream inputStream = new FileInputStream(user_info)) {
                     data = new byte[inputStream.available()];
                     inputStream.read(data);
-                    App.db.insert_user_info(data, p.getUniqueId().toString());
+                    Main.db.insert_user_info(data, p.getUniqueId().toString());
                     // App.logger.info("Backup " + p.getUniqueId());
                     p.sendMessage("Your Information has been backup now.");
                 } catch (Exception ex) {

@@ -19,7 +19,7 @@ public class DeathCoodinate {
         @Override
         public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
             if (sender instanceof Player) {
-                String[] coordinate = App.db.get_death_coordinate((Player) sender);
+                String[] coordinate = Main.db.get_death_coordinate((Player) sender);
                 if (coordinate[0] != null) {
                     String msg_c = "&7You last died at &8(&a%x%&7, &a%y%&7, &a%z%&8)&7 in world &a%world%&7."
                             .replaceAll("%x%", coordinate[0]).replaceAll("%y%", coordinate[1])
@@ -47,7 +47,7 @@ public class DeathCoodinate {
     public class listener implements Listener {
         @EventHandler
         public void OnDeath(PlayerDeathEvent e) {
-            App.db.update_death_coordinate(e);
+            Main.db.update_death_coordinate(e);
         }
     }
 

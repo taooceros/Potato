@@ -9,15 +9,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class App extends JavaPlugin implements Listener {
+public class Main extends JavaPlugin implements Listener {
     public static Logger logger;
     public static DataBase db;
 
     @Override
     public void onEnable() {
-        logger = getLogger();
-        db = new DataBase();
+        logger = getLogger(); // get logger for debug
+        db = new DataBase(); // create an instance of a seperate class
 
+        // instanlize and register functions
         DeathCoodinate dc = new DeathCoodinate();
         Bukkit.getPluginManager().registerEvents(dc.new listener(), this);
         Objects.requireNonNull(getCommand("deathcoords")).setExecutor(dc.new commandExecutor());
@@ -31,11 +32,6 @@ public class App extends JavaPlugin implements Listener {
         Here here = new Here();
         Objects.requireNonNull(getCommand("here")).setExecutor(here.new commandExecutor());
 
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return true;
     }
 
     @Override
